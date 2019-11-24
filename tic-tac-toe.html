@@ -7,39 +7,70 @@
 </head>
 <body>
   <select class="select-css">
-    <option>First player select your mark</option>
-    <option>X</option>
-    <option>0</option>
+    <option value=" " selected>First player select your mark</option>
+    <option value="X">X</option>
+    <option value="O">O</option>
   </select>
   <span class="nowrap">Who's turn is it any way???</span>
   <div class="board">
     <div class="box">
-      <kbd></kbd>
+      <span id='text'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span id='text'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span id='text'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span id='text'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span id='text'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span id='text'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span id='text'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span id='text'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span id='text'></span>
     </div>
   </div>
+  <A HREF="javascript:history.go(0)">Click to restart the game</A>
+  <script>
+  let playerMark = "";
+  const boxes = document.querySelectorAll('.box');
+  const dropDown = document.querySelector('.select-css');
+  const displayTextField = document.querySelector('.nowrap');
+
+  function displayText(msg){
+    displayTextField.textContent = msg +  ' players turn';
+  }
+
+  function selectBox(e) {
+    const textBox = this.children[0];
+    textBox.textContent = playerMark;
+    if(playerMark === "X")
+    {
+      playerMark = "O";
+    }else {
+      playerMark = "X";
+    }
+    displayText( playerMark );
+  }
+
+  dropDown.addEventListener("change", function() {
+    displayText( dropDown.value );
+    playerMark = dropDown.value;
+    dropDown.disabled = true;
+    boxes.forEach(box => box.addEventListener('click',selectBox));
+  });
+
+  </script>
 </body>
 </html>
