@@ -14,31 +14,31 @@
   <span class="nowrap">Who's turn is it any way???</span>
   <div class="board">
     <div class="box">
-      <span id='text'></span>
+      <span class="text" id='1'></span>
     </div>
     <div class="box">
-      <span id='text'></span>
+      <span class="text" id='2'></span>
     </div>
     <div class="box">
-      <span id='text'></span>
+      <span class="text" id='3'></span>
     </div>
     <div class="box">
-      <span id='text'></span>
+      <span class="text" id='3'></span>
     </div>
     <div class="box">
-      <span id='text'></span>
+      <span class="text" id='4'></span>
     </div>
     <div class="box">
-      <span id='text'></span>
+      <span class="text" id='5'></span>
     </div>
     <div class="box">
-      <span id='text'></span>
+      <span class="text" id='6'></span>
     </div>
     <div class="box">
-      <span id='text'></span>
+      <span class="text" id='7'></span>
     </div>
     <div class="box">
-      <span id='text'></span>
+      <span class="text" id='8'></span>
     </div>
   </div>
   <A HREF="javascript:history.go(0)">Click to restart the game</A>
@@ -47,21 +47,54 @@
   const boxes = document.querySelectorAll('.box');
   const dropDown = document.querySelector('.select-css');
   const displayTextField = document.querySelector('.nowrap');
-
+  const answers = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]];
+  var xArray = [];
+  var oArray = [];
   function displayText(msg){
     displayTextField.textContent = msg +  ' players turn';
   }
-
+  function checkAnswer(player, answer)
+  {
+    for (var h = 0; h < answer.length; h++)
+      if(player[i]!=answer[i])
+         return "False";
+    return "True";
+  }
+  function checkForWinner(player)
+  {
+    var pLen = player.lenth;
+    var aLen = answers.length;
+    if(pLen >= 3)
+    {
+      for (var i = 0; i < aLen; i++)
+      {
+        var answer = answers[i];
+        player.sort();
+        if(checkForAnswer(player,answer) === "True")
+        {
+          console.log(winner);
+        }
+      }
+    }
+  }
+  var xArray = [];
+  var oArray = [];
   function selectBox(e) {
     const textBox = this.children[0];
     textBox.textContent = playerMark;
+
     if(playerMark === "X")
     {
+      xArray.push(textBox.id);
+      console.log('xArray: ' + xArray);
       playerMark = "O";
     }else {
+      oArray.push(textBox.id);
+      console.log('oArray: ' +oArray);
       playerMark = "X";
     }
     displayText( playerMark );
+    this.removeEventListener('click',selectBox);
   }
 
   dropDown.addEventListener("change", function() {
