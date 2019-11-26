@@ -7,39 +7,126 @@
 </head>
 <body>
   <select class="select-css">
-    <option>First player select your mark</option>
-    <option>X</option>
-    <option>0</option>
+    <option value=" " selected>First player select your mark</option>
+    <option value="X">X</option>
+    <option value="O">O</option>
   </select>
   <span class="nowrap">Who's turn is it any way???</span>
   <div class="board">
     <div class="box">
-      <kbd></kbd>
+      <span class="text" id='1'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span class="text" id='2'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span class="text" id='3'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span class="text" id='4'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span class="text" id='5'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span class="text" id='6'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span class="text" id='7'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span class="text" id='8'></span>
     </div>
     <div class="box">
-      <kbd></kbd>
+      <span class="text" id='9'></span>
     </div>
   </div>
+  <A HREF="javascript:history.go(0)">Click to restart the game</A>
+  <script>
+  let playerMark = "";
+  const boxes = document.querySelectorAll('.box');
+  const dropDown = document.querySelector('.select-css');
+  const displayTextField = document.querySelector('.nowrap');
+  const answerLength = 3;
+  const answers = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]];
+  var xArray = [];
+  var oArray = [];
+  var winner = false;
+
+  function displayText(msg){
+    displayTextField.textContent = msg ;
+  }
+
+  function checkAnswer(player, answer)
+  {
+    let count = 0;
+    for(var m = 0; m < player.length; m++){
+      for (var h = 0; h < answerLength; h++){
+        if(player[m] == answer[h]){
+          count += 1;
+          break;
+        }
+      }
+    }
+    return count == answerLength;
+  }
+
+  function checkForWinner(player)
+  {
+    var pLen = player.length;
+    // just trying to minimize unnecessary work here.
+    if(pLen >= answerLength)
+    {
+      for (var i = 0; i < answers.length; i++)
+      {
+        var answer = answers[i];
+        player.sort();
+        if(checkAnswer(player,answer))
+        {
+          winner = true;
+          for (var t = 0; t < answerLength; t++)
+          {
+            var box = document.getElementById(answer[t])
+            box.style.backgroundColor = 'red';
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  function makeMove(textBox, nextPlayer, myArray){
+    myArray.push(textBox.id);
+    checkForWinner(myArray);
+    if(!winner) {
+       playerMark = nextPlayer;
+       displayText( playerMark +  " player\'s turn");
+    }
+    else {
+      displayText( playerMark +  " wins!" );
+      boxes.forEach(box => box.removeEventListener('click',selectBox));
+    }
+  }
+  function selectBox(e) {
+    const textBox = this.children[0];
+    textBox.textContent = playerMark;
+    if(playerMark === "X")
+    {
+      makeMove(textBox, "O",xArray);
+    }else {
+      makeMove(textBox, "X",oArray);
+    }
+    if(!winner) {
+      this.removeEventListener('click',selectBox);
+    }
+  }
+
+  dropDown.addEventListener("change", function() {
+    displayText( dropDown.value +  " player\'s turn");
+    playerMark = dropDown.value;
+    dropDown.disabled = true;
+    boxes.forEach(box => box.addEventListener('click',selectBox));
+  });
+  </script>
 </body>
 </html>
